@@ -1,29 +1,20 @@
-from flask import Flask, jsonify, request
+from flask import Flask
+from models import db
+from resources.user import UserRegister, UserList
+from auth import configure_auth
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///db.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+jwt = configure_auth(app)
 
-#Ruta de bienvenida
-@app.route('/')
-def home():
-	return "Bienvenidos a la API con Flask"
 
-@app.route('/api/v1/data',methods=['GET'])
-def get_data():
-	data={
-	"nombre":"Juan",
-	"edad":30,
-	"ocupacion":"Ingeniero"
-	}
-	return jsonify(data)
+with app.app_context():
+	db.create_all()
 
-@app.route('/api/v1/data',methods=['POST'])
-def create_data():
-	new_data = request.get_json()
-	response = {
-		"message":"Datos recibidos",
-		"data":new_data
-	}
-	return jsonify(response), 201
+app.add_url_rule('/register',view_func=UserRegister.as_view('user_register')) #vistas basadas en clases
+app.add_url_rule('/users',view_func=UserList.as_view('user_list'))
 
 if __name__ == '__main__':
 	app.run(debug=True)
