@@ -26,7 +26,7 @@ def configure_auth(app):
 		user = User.query.filter_by(username=data['username']).first()
 
 		if user and user.password == data['password']:
-			access_token = create_access_token(identity=user.username)
+			access_token = create_access_token(identity=user.id)
 			return jsonify(access_token=access_token)
 		else:
 			return jsonify({"message":"Invalid credentias"}), 401
