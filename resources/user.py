@@ -6,7 +6,6 @@ from flask_jwt_extended import jwt_required
 from models import db, User
 
 class UserRegister(MethodView):
-
 	def post(self):
 		data = request.get_json()
 		new_user = User(username=data['username'], password=data['password'])

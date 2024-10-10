@@ -1,10 +1,8 @@
-# auth.py
-
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, JWTManager
-from models import db, User
 from dotenv import load_dotenv
 from datetime  import timedelta
+from models import db, User
 import os
 
 load_dotenv()
